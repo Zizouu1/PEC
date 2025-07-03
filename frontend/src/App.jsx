@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
+import Login from "./components/LoginForm";
+import HrDashboard from "./components/HrDashboard";
+import SecurityDashboard from "./components/SecurityDashboard";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [token, setToken] = useState("");
+  const [role, setRole] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Login
+            onLogin={(tk, rl) => {
+              setToken(tk);
+              setRole(rl);
+            }}
+          />
+        }
+      />
+      <Route
+        path="/hr"
+        element={
+          role === "hr" ? <HrDashboard token={token} /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/security"
+        element={
+          role === "security" ? (
+            <SecurityDashboard token={token} />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
+      />
+    </Routes>
+  );
 }
-
-export default App
