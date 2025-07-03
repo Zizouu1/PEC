@@ -20,6 +20,7 @@
     justify-content: center;
 }
 
+.filters select,
 .filters input {
     padding: 10px 14px;
     border: 1px solid #d1d5db;
@@ -28,6 +29,7 @@
     transition: all 0.3s;
 }
 
+.filters select:focus,
 .filters input:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);

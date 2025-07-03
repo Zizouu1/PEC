@@ -14,4 +14,10 @@ class Visitor extends Model
         'category',
         'description'
     ];
+    protected $appends = ['time_in'];
+
+    public function getTimeInAttribute()
+    {
+        return $this->created_at;
+    }
 }

@@ -8,7 +8,15 @@ class VisitorController extends Controller
 {
     public function index()
     {
-        return Visitor::all();
+        return Visitor::all()->map(function ($visitor) {
+            return [
+                'id' => $visitor->id,
+                'fullname' => $visitor->fullname,
+                'society_name' => $visitor->society_name,
+                'category' => $visitor->category,
+                'time_in' => $visitor->created_at->toISOString(), 
+            ];
+        });
     }
 
     public function store(Request $request)
