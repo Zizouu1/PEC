@@ -66,3 +66,17 @@
 .visitor-table tbody tr:hover {
     background-color: #f0f9ff;
 }
+.visitor-table button{
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background-color: #3b82f6;
+    color: white;
+}
+
+.visitor-table button:hover {
+    background-color: #1e3a8a;
+}

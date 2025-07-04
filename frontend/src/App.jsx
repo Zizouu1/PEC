@@ -3,6 +3,7 @@ import { useState } from "react";
 import Login from "./components/LoginForm";
 import HrDashboard from "./components/HrDashboard";
 import SecurityDashboard from "./components/SecurityDashboard";
+import HrUpdate from "./components/HrUpdate";
 
 export default function App() {
   const [token, setToken] = useState("");
@@ -37,6 +38,8 @@ export default function App() {
           )
         }
       />
+      <Route path="/HrUpdate" element={<HrUpdate token={token} />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }

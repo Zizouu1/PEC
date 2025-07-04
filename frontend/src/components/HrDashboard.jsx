@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./HrDash.module.css";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function HrDashboard({ token }) {
     const [visitors, setVisitors] = useState([]);
@@ -10,6 +12,8 @@ export default function HrDashboard({ token }) {
     const [endDate, setEndDate] = useState("");
     const [searchCategory, setSearchCategory] = useState("");
     const [searchSociety, setSearchSociety] = useState("");
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const fetchVisitors = async () => {
@@ -56,9 +60,29 @@ export default function HrDashboard({ token }) {
                 v.society_name.toLowerCase().includes(searchSociety.toLowerCase())
             );
         }
+        
 
         setFiltered(filteredList);
     }, [searchName, startDate, endDate, visitors, searchCategory, searchSociety]);
+    const handleDelete = (visitorId)=> {
+            axios.delete(`http://localhost:8000/api/visitors/${visitorId}`, {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            })
+            .then(() => {
+                setVisitors((prevVisitors) =>
+                prevVisitors.filter((visitor) => visitor.id !== visitorId)
+                );
+            })
+            .catch((error) => {
+                console.error("Error deleting visitor:", error);
+            });
+    }
+    const handleUpdate = (visitorId) => {
+        navigate("/HrUpdate", { state: {visitorId} });
+    };
+
 
     return (
         <div className={styles["hr-container"]}>
@@ -116,6 +140,8 @@ export default function HrDashboard({ token }) {
                     <td>{v.society_name}</td>
                     <td>{v.category}</td>
                     <td>{new Date(v.time_in).toLocaleString()}</td>
+                    <td><button name="delete" onClick={() => handleDelete(v.id)}>Delete</button></td>
+                    <td><button name="update" onClick={() => handleUpdate(v.id)}>Update</button></td>
                 </tr>
                 ))}
             </tbody>
