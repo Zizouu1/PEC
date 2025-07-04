@@ -80,3 +80,11 @@
 .visitor-table button:hover {
     background-color: #1e3a8a;
 }
+
+.loading {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 2rem;
+    color: #555;
+}
+

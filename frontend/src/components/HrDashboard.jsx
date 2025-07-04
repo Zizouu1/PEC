@@ -13,6 +13,8 @@ export default function HrDashboard({ token }) {
     const [searchCategory, setSearchCategory] = useState("");
     const [searchSociety, setSearchSociety] = useState("");
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+
 
 
     useEffect(() => {
@@ -25,8 +27,10 @@ export default function HrDashboard({ token }) {
             });
             setVisitors(res.data);
             setFiltered(res.data);
+            setLoading(false);
         } catch (error) {
             console.error("Error fetching visitors:", error);
+            setLoading(false);
         }
         };
 
@@ -79,10 +83,12 @@ export default function HrDashboard({ token }) {
                 console.error("Error deleting visitor:", error);
             });
     }
-    const handleUpdate = (visitorId) => {
-        navigate("/HrUpdate", { state: {visitorId} });
+    const handleUpdate = (visitor) => {
+        navigate(`/HrUpdate/${visitor.id}`);
     };
-
+    if (loading) {
+        return <div className={styles["loading"]}>Loading visitor data...</div>;
+    }
 
     return (
         <div className={styles["hr-container"]}>
@@ -129,6 +135,7 @@ export default function HrDashboard({ token }) {
                 <th>Fullname</th>
                 <th>Society</th>
                 <th>Category</th>
+                <th>Description</th>
                 <th>Time In</th>
                 </tr>
             </thead>
@@ -139,9 +146,10 @@ export default function HrDashboard({ token }) {
                     <td>{v.fullname}</td>
                     <td>{v.society_name}</td>
                     <td>{v.category}</td>
+                    <td>{v.description ? v.description : "No description"}</td>
                     <td>{new Date(v.time_in).toLocaleString()}</td>
                     <td><button name="delete" onClick={() => handleDelete(v.id)}>Delete</button></td>
-                    <td><button name="update" onClick={() => handleUpdate(v.id)}>Update</button></td>
+                    <td><button name="update" onClick={() => handleUpdate(v)}>Update</button></td>
                 </tr>
                 ))}
             </tbody>

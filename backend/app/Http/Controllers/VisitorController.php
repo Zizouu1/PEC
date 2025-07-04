@@ -14,6 +14,7 @@ class VisitorController extends Controller
                 'fullname' => $visitor->fullname,
                 'society_name' => $visitor->society_name,
                 'category' => $visitor->category,
+                'description' => $visitor->description,
                 'time_in' => $visitor->created_at->toISOString(), 
             ];
         });

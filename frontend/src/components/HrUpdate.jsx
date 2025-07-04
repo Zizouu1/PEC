@@ -1,14 +1,15 @@
 import { useState , useEffect } from "react";
 import axios from "axios";
 import styles from "./ScDash.module.css";
-import { useNavigate , useLocation } from 'react-router-dom';
+import { useNavigate , useParams } from 'react-router-dom';
 
 
 
 
 
 export default function HrUpdate({ token }) {
-    const location = useLocation();
+    const [loading, setLoading] = useState(true);
+    const { visitorId } = useParams();
     const navigate = useNavigate();
     const [visitor, setVisitor] = useState({});
     const [form, setForm] = useState({
@@ -17,20 +18,18 @@ export default function HrUpdate({ token }) {
         category: "client",
         description: "",
     });
-    const visitorId = location.state?.visitorId;
 
 
     useEffect(() => {
         const getV = async () => {
             if (!visitorId) return;
             try {
-                const res = await axios.get("http://localhost:8000/api/visitors", {
+                const res = await axios.get(`http://localhost:8000/api/visitors/${visitorId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 });
-                const allVisitors = res.data;
-                const foundVisitor = allVisitors.find(v => v.id === Number(visitorId));
+                const foundVisitor = res.data;
                 setVisitor(foundVisitor);
                 setForm({
                     fullname: foundVisitor.fullname,
@@ -38,8 +37,10 @@ export default function HrUpdate({ token }) {
                     category: foundVisitor.category,
                     description: foundVisitor.description,
                 });
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching visitors:", error);
+                setLoading(false);
             }
         };
         getV();
@@ -62,8 +63,11 @@ export default function HrUpdate({ token }) {
         } catch (error) {
             console.error("Error updating visitor:", error);
         }
-        navigate("/HrDashboard")
+        navigate("/hr");
     };
+    if (loading) {
+    return <div className={styles["loading"]}>Loading visitor data...</div>;
+    }
 
     return (
         <div className={styles["form-container"]}>
